@@ -5,7 +5,8 @@ import websockets
 from websockets import serve
 
 from __main__ import *
-
+import 
+print(__main__)
 
 class WsClient():
     def __init__(self, host="0.0.0.0", port="19132"):
@@ -35,4 +36,5 @@ class WsClient():
     def event(self, func):
         def wrapper(*args, **kwargs):
             print(func.__name__)
+            res = func(*args, **kwargs)
         return wrapper
