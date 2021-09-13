@@ -10,11 +10,11 @@ def event_ready(event):
 
 @WsClient.event
 def event_connect(event):
-    print()
+    print(event)
 
 @WsClient.event
 def event_message(event):
-    print()
+    print(event)
 
 
 WsClient.start()
