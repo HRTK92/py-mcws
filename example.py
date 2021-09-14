@@ -1,16 +1,19 @@
 import asyncio
 
 import py_mcws
-WsClient = py_mcws.WsClient
 
-class MyWsClient(WsClient):
+class MyWsClient(py_mcws.WsClient):
     def event_ready(self):
-        print(f"{self.host}:{self.port}")
+        print(f"Ready {self.host}:{self.port}")
     
     async def event_connect(self):
-        print(event)
+        print("Connected!")
+        await self.command("say Hello")
+    
+    async def event_disconnect(self):
+        print("disconnect!")
 
-    def event_message(self, event):
+    async def event_message(self, event):
         print(event)
 
 MyWsClient().start(host="0.0.0.0", port=19132)

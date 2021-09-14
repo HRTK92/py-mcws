@@ -1,8 +1,11 @@
 import asyncio
+import sys
 import json
+import uuid
 
 import websockets
 from websockets import serve
+
 
 class WsClient:
     def start(self, host="0.0.0.0", port=19132):
@@ -16,19 +19,54 @@ class WsClient:
 
     async def receive(self, websocket, path):
         self.ws = websocket
+        await self.listen_event()
         await self.event_connect()
-        while True:
-            data = await self.ws.recv()
-            msg = json.loads(data)
-            await self.parse_command(msg)
+        try:
+            while True:
+                data = await self.ws.recv()
+                msg = json.loads(data)
+                await self.parse_command(msg)
+        except (
+                websockets.exceptions.ConnectionClosedOK,
+                websockets.exceptions.ConnectionClosedError,
+                websockets.exceptions.ConnectionClosed):
+            await self.event_disconnect()
+            sys.exit()
+
+    async def listen_event(self):
+        events = ["PlayerMessage", "PlayerDied","MobKilled", "BlockPlaced", "BlockBroken"]
+        for event in events:
+            await self.ws.send(json.dumps({
+                "body": {
+                    "eventName": event
+                },
+                "header": {
+                    "requestId": "00000000-0000-0000-0000-000000000000",
+                    "messagePurpose": "subscribe",
+                    "version": 1,
+                    "messageType": "commandRequest"
+                }
+            }))
 
     async def parse_command(self, message):
-        if msg["header"]["messagePurpose"] == "event":
-            if msg["body"]["eventName"] == "PlayerMessage" and msg["body"]["properties"]['MessageType'] == 'chat':
+        if message["header"]["messagePurpose"] == "event":
+            if message["body"]["eventName"] == "PlayerMessage" and message["body"]["properties"]['MessageType'] == 'chat':
                 await self.event_message(message)
 
-    def event(self, func):
-        def wrapper(*args, **kwargs):
-            print(func.__name__)
-            res = func(*args, **kwargs)
-        return wrapper
+    async def command(self, cmd):
+        cmd_json = json.dumps({
+            "body": {
+                "origin": {
+                    "type": "player"
+                },
+                "commandLine": cmd,
+                "version": 1
+            },
+            "header": {
+                "requestId": str(uuid.uuid4()),
+                "messagePurpose": "commandRequest",
+                "version": 1,
+                "messageType": "commandRequest"
+            }
+        })
+        return await self.ws.send(cmd_json)
