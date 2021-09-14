@@ -34,8 +34,7 @@ class WsClient:
             sys.exit()
 
     async def listen_event(self):
-        events = ["PlayerMessage", "PlayerDied","MobKilled", "BlockPlaced", "BlockBroken"]
-        for event in events:
+        for event in self.events:
             await self.ws.send(json.dumps({
                 "body": {
                     "eventName": event
@@ -70,3 +69,6 @@ class WsClient:
             }
         })
         return await self.ws.send(cmd_json)
+
+    async def event(self, name, *args):
+        func = f"event_{name}"
