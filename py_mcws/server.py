@@ -4,25 +4,19 @@ import json
 import websockets
 from websockets import serve
 
-from __main__ import *
-import 
-print(__main__)
-
-class WsClient():
-    def __init__(self, host="0.0.0.0", port="19132"):
+class WsClient:
+    def start(self, host="0.0.0.0", port=19132):
+        self.ws = websockets.serve(self.receive, host, port)
         self.host = host
         self.port = port
-
-    def start(self):
-        self.ws = websockets.serve(self.receive, self.host, self.port)
         self.loop = asyncio.get_event_loop()
         self.loop.run_until_complete(self.ws)
-        event_ready(self.ws)
+        self.event_ready()
         self.loop.run_forever()
 
     async def receive(self, websocket, path):
         self.ws = websocket
-        event_connect(websocket)
+        await self.event_connect()
         while True:
             data = await self.ws.recv()
             msg = json.loads(data)
@@ -31,7 +25,7 @@ class WsClient():
     async def parse_command(self, message):
         if msg["header"]["messagePurpose"] == "event":
             if msg["body"]["eventName"] == "PlayerMessage" and msg["body"]["properties"]['MessageType'] == 'chat':
-                event_message(message)
+                await self.event_message(message)
 
     def event(self, func):
         def wrapper(*args, **kwargs):
