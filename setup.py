@@ -6,7 +6,7 @@ def _requires_from_file(filename):
 setup(
     name='py-mcws',    #パッケージ名
     version="0.0.1",
-    description="minecraft",
+    description="Minecraft Bedrock WebSocket",
     long_description="",
     author='HRTK92',
     url="https://github.com/HRTK92/py-mcws",
