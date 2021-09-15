@@ -48,7 +48,7 @@ async def event_PlayerMessage(self, event):
 await self.command("say hello")
 ```
 
-### ScoreBoard
+### ScoreBoard 使えない
 ```python
 scoreboard = py_mcws.ScoreBoard("名前"、"表示名")
 await scoreboard.show()
