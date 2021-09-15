@@ -2,7 +2,7 @@ import asyncio
 
 import py_mcws
 
-class MyWsClient(py_mcws.WsClient):
+class MyWsClient():
     def event_ready(self):
         print(f"Ready {self.host}:{self.port}")
         self.events = ["PlayerMessage", "PlayerDied","MobKilled", "BlockPlaced", "BlockBroken"]
