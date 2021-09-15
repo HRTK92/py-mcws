@@ -14,7 +14,7 @@ class MyWsClient(py_mcws.WsClient):
     async def event_disconnect(self):
         print("disconnect!")
 
-    async def event_message(self, event):
+    async def event_PlayerMessage(self, event):
         print(event)
 
 MyWsClient().start(host="0.0.0.0", port=19132)

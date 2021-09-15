@@ -52,7 +52,7 @@ class WsClient:
             event_name = message["body"]["eventName"]
             await self.event(event_name, message)
             if message["body"]["eventName"] == "PlayerMessage" and message["body"]["properties"]['MessageType'] == 'chat':
-                await self.event_message(message)
+                pass
 
     async def command(self, cmd):
         cmd_json = json.dumps({
@@ -75,6 +75,6 @@ class WsClient:
     async def event(self, name, *args):
         func = f"self.event_{name}"
         try:
-            await eval(f"{func}({*args})")
+            await eval(f"{func}({args})")
         except:
             print(f"event_{name}")
