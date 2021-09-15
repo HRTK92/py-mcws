@@ -4,7 +4,7 @@ def _requires_from_file(filename):
     return open(filename).read().splitlines()
 
 setup(
-    name='py-mcws',    #パッケージ名
+    name='py-mcws',
     version="0.0.1",
     description="Minecraft Bedrock WebSocket",
     long_description="",
@@ -15,5 +15,5 @@ setup(
         "Development Status :: 1 - Planning"
     ],
     install_requires=_requires_from_file('requirements.txt'),
-    packages=['py_mcws']   #パッケージのサブフォルダー
+    packages=['py_mcws']
 )
