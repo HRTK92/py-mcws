@@ -27,3 +27,6 @@ class MyWsClient(py_mcws.WsClient):
 
 MyWsClient().start(host="0.0.0.0", port=19132)
 ```
+
+### イベント
+[]()

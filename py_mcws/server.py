@@ -49,6 +49,8 @@ class WsClient:
 
     async def parse_command(self, message):
         if message["header"]["messagePurpose"] == "event":
+            event_name = message["body"]["eventName"]
+            await self.event(event_name, message)
             if message["body"]["eventName"] == "PlayerMessage" and message["body"]["properties"]['MessageType'] == 'chat':
                 await self.event_message(message)
 
@@ -71,4 +73,8 @@ class WsClient:
         return await self.ws.send(cmd_json)
 
     async def event(self, name, *args):
-        func = f"event_{name}"
+        func = f"self.event_{name}"
+        try:
+            await eval(f"{func}({*args})")
+        except:
+            print(f"event_{name}")
