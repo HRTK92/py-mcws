@@ -14,6 +14,7 @@ import py_mcws
 class MyWsClient(py_mcws.WsClient):
     def event_ready(self):
         print(f"Ready {self.host}:{self.port}")
+        self.events = ["PlayerMessage", "PlayerDied","MobKilled", "BlockPlaced", "BlockBroken"]
     
     async def event_connect(self):
         print("Connected!")
@@ -22,11 +23,18 @@ class MyWsClient(py_mcws.WsClient):
     async def event_disconnect(self):
         print("disconnect!")
 
-    async def event_message(self, event):
+    async def event_PlayerMessage(self, event):
         print(event)
 
 MyWsClient().start(host="0.0.0.0", port=19132)
 ```
 
 ### イベント
-[]()
+[イベント一覧](https://gist.github.com/jocopa3/5f718f4198f1ea91a37e3a9da468675c#file-mcpe-w10-event-names)
+
+```python
+self.events["PlayerMessage"]
+
+async def event_PlayerMessage(self, event):
+    print(event)
+```
