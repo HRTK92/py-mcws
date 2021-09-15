@@ -8,7 +8,7 @@ from websockets import serve
 
 from .scoreboard import ScoreBoard
 
-class WsClient():
+class WsClient:
     def start(self, host="0.0.0.0", port=19132):
         self.ws = websockets.serve(self.receive, host, port)
         self.host = host
@@ -22,7 +22,7 @@ class WsClient():
     async def receive(self, websocket, path):
         self.ws = websocket
         await self.listen_event()
-        await self.event_connect()
+        await self.event("connect")#self.event_connect()
         try:
             while True:
                 data = await self.ws.recv()
@@ -32,7 +32,7 @@ class WsClient():
                 websockets.exceptions.ConnectionClosedOK,
                 websockets.exceptions.ConnectionClosedError,
                 websockets.exceptions.ConnectionClosed):
-            await self.event_disconnect()
+            await self.event("disconnect")#self.event_disconnect()
             sys.exit()
 
     async def listen_event(self):
