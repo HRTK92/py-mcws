@@ -14,10 +14,14 @@ import py_mcws
 class MyWsClient(py_mcws.WsClient):
     def event_ready(self):
         print(f"Ready {self.host}:{self.port}")
+
+        #受け取るイベント
         self.events = ["PlayerMessage", "PlayerDied","MobKilled", "BlockPlaced", "BlockBroken"]
     
     async def event_connect(self):
         print("Connected!")
+
+        #コマンドを実行
         await self.command("say Hello")
     
     async def event_disconnect(self):
@@ -37,4 +41,9 @@ self.events["PlayerMessage"]
 
 async def event_PlayerMessage(self, event):
     print(event)
+```
+
+### コマンド
+```python
+await self.command("say hello")
 ```
