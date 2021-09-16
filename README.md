@@ -1,11 +1,15 @@
 ## py-mcws(作成中)
 
+---
+
 ### 使い方
+
 ```sh
 pip install git+https://github.com/HRTK92/py-mcws
 ```
 
 ### 例
+
 ```python
 import asyncio
 
@@ -16,7 +20,7 @@ class MyWsClient(py_mcws.WsClient):
         print(f"Ready {self.host}:{self.port}")
 
         #受け取るイベント
-        self.events = ["PlayerMessage", "PlayerDied","MobKilled", "BlockPlaced", "BlockBroken"]
+        self.events = ["PlayerMessage", "PlayerDied"]
     
     async def event_connect(self):
         print("Connected!")
@@ -30,10 +34,14 @@ class MyWsClient(py_mcws.WsClient):
     async def event_PlayerMessage(self, event):
         print(event)
 
+    async def event_PlayerDied(self, event):
+        print(event)
+
 MyWsClient().start(host="0.0.0.0", port=19132)
 ```
 
 ### イベント
+
 [イベント一覧](https://gist.github.com/jocopa3/5f718f4198f1ea91a37e3a9da468675c#file-mcpe-w10-event-names)
 
 ```python
@@ -44,11 +52,13 @@ async def event_PlayerMessage(self, event):
 ```
 
 ### コマンド
+
 ```python
 await self.command("say hello")
 ```
 
-### ScoreBoard 使えない
+### ScoreBoard (作成中)
+
 ```python
 scoreboard = py_mcws.ScoreBoard("名前"、"表示名")
 await scoreboard.show()
