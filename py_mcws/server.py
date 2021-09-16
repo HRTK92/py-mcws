@@ -76,7 +76,13 @@ class WsClient:
 
     async def event(self, name, *args):
         func = f"self.event_{name}"
-        try:
-            await eval(f"{func}({args})")
-        except:
-            print(f"event_{name}")
+        if args == ():
+            try:
+                await eval(f"{func}()")
+            except:
+                print(f"event_{name}")
+        else:
+            try:
+                await eval(f"{func}({args})")
+            except:
+                print(f"event_{name}")
