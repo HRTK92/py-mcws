@@ -1,14 +1,14 @@
-## py-mcws(作成中)
+# py-mcws(作成中)
 
 ---
 
-### インストール
+## インストール
 
 ```sh
 pip install git+https://github.com/HRTK92/py-mcws
 ```
 
-### 使い方
+## 使い方
 
 ```python
 import asyncio
@@ -40,13 +40,15 @@ class MyWsClient(py_mcws.WsClient):
 MyWsClient().start(host="0.0.0.0", port=19132)
 ```
 
-### 接続の仕方
+## 接続の仕方
+
 Minecraft内のチャットで
-```
+
+```cmd
 /connect host:port
 ```
 
-### イベント
+## イベント
 
 [イベント一覧](https://gist.github.com/jocopa3/5f718f4198f1ea91a37e3a9da468675c#file-mcpe-w10-event-names)
 
@@ -57,14 +59,14 @@ async def event_PlayerMessage(self, event):
     print(event)
 ```
 
-### コマンド
+## コマンド
 
 ```python
 cmd = await self.command("say hello")
-
+print(cmd)
 ```
 
-### ScoreBoard (作成中)
+## ScoreBoard (作成中)
 
 ```python
 scoreboard = py_mcws.ScoreBoard("名前"、"表示名")
