@@ -60,7 +60,8 @@ async def event_PlayerMessage(self, event):
 ### コマンド
 
 ```python
-await self.command("say hello")
+cmd = await self.command("say hello")
+
 ```
 
 ### ScoreBoard (作成中)

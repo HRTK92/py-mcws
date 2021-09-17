@@ -9,9 +9,7 @@ class MyWsClient(py_mcws.WsClient):
     
     async def event_connect(self):
         print("Connected!")
-        await self.command("say Hello")
-        scoreboard = await self.ScoreBoard(self, "py-mcws", "py-mcws").create()
-        await scoreboard.show()
+        say = await self.command("say Hello")
     
     async def event_disconnect(self):
         print("disconnect!")

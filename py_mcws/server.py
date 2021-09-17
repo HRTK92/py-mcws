@@ -57,7 +57,7 @@ class WsClient:
                 pass
 
     async def command(self, cmd):
-        uuid4 = uuid.uuid4()
+        uuid4 = str(uuid.uuid4())
         cmd_json = json.dumps({
             "body": {
                 "origin": {
@@ -67,7 +67,7 @@ class WsClient:
                 "version": 1
             },
             "header": {
-                "requestId": str(uuid4),
+                "requestId": uuid4,
                 "messagePurpose": "commandRequest",
                 "version": 1,
                 "messageType": "commandRequest"
@@ -76,7 +76,8 @@ class WsClient:
         await self.ws.send(cmd_json)
         data = await self.ws.recv()
         msg = json.loads(data)
-        if msg.header.messagePurpose == "commandResponse" and msg.header.requestId == uuid4:
+        print(msg)
+        if msg["header"]["messagePurpose"] == "commandResponse" and msg["header"]["requestId"] == uuid4:
             return msg
         else:
             return None
@@ -87,10 +88,10 @@ class WsClient:
         if args == ():
             try:
                 await eval(f"{func}()")
-            except:
+            except NameError as e:
                 print(f"event_{name}")
         else:
             try:
                 await eval(f"{func}({args})")
-            except:
+            except NameError as e:
                 print(f"event_{name}")
