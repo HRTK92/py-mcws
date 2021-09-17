@@ -40,6 +40,12 @@ class MyWsClient(py_mcws.WsClient):
 MyWsClient().start(host="0.0.0.0", port=19132)
 ```
 
+### 接続の仕方
+Minecraft内のチャットで
+```
+/connect host:port
+```
+
 ### イベント
 
 [イベント一覧](https://gist.github.com/jocopa3/5f718f4198f1ea91a37e3a9da468675c#file-mcpe-w10-event-names)
