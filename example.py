@@ -1,5 +1,3 @@
-import asyncio
-
 import py_mcws
 
 class MyWsClient(py_mcws.WsClient):

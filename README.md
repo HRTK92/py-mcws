@@ -11,8 +11,6 @@ pip install git+https://github.com/HRTK92/py-mcws
 ## 使い方
 
 ```python
-import asyncio
-
 import py_mcws
 
 class MyWsClient(py_mcws.WsClient):
