@@ -2,13 +2,13 @@
 
 ---
 
-### 使い方
+### インストール
 
 ```sh
 pip install git+https://github.com/HRTK92/py-mcws
 ```
 
-### 例
+### 使い方
 
 ```python
 import asyncio
