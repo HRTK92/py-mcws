@@ -76,7 +76,6 @@ class WsClient:
         await self.ws.send(cmd_json)
         data = await self.ws.recv()
         msg = json.loads(data)
-        print(msg)
         if msg["header"]["messagePurpose"] == "commandResponse" and msg["header"]["requestId"] == uuid4:
             return msg
         else:
