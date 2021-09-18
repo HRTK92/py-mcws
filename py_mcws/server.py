@@ -8,6 +8,7 @@ from websockets import serve
 
 from .scoreboard import ScoreBoard
 
+
 class WsClient:
     def start(self, host="0.0.0.0", port=19132):
         self.ws = websockets.serve(self.receive, host, port)
@@ -22,7 +23,7 @@ class WsClient:
     async def receive(self, websocket, path):
         self.ws = websocket
         await self.listen_event()
-        await self.event("connect")#self.event_connect()
+        await self.event("connect")  # self.event_connect()
         try:
             while True:
                 data = await self.ws.recv()
@@ -32,7 +33,7 @@ class WsClient:
                 websockets.exceptions.ConnectionClosedOK,
                 websockets.exceptions.ConnectionClosedError,
                 websockets.exceptions.ConnectionClosed):
-            await self.event("disconnect")#self.event_disconnect()
+            await self.event("disconnect")  # self.event_disconnect()
             sys.exit()
 
     async def listen_event(self):
@@ -55,6 +56,8 @@ class WsClient:
             await self.event(event_name, message)
             if message["body"]["eventName"] == "PlayerMessage" and message["body"]["properties"]['MessageType'] == 'chat':
                 pass
+        elif message["header"]["messagePurpose"] == "error":
+            await self.event("error", message)
 
     async def command(self, cmd):
         uuid4 = str(uuid.uuid4())
@@ -80,7 +83,6 @@ class WsClient:
             return msg
         else:
             return None
-
 
     async def event(self, name, *args):
         func = f"self.event_{name}"
