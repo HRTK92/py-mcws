@@ -1,11 +1,12 @@
-# py-mcws(作成中)
+# py-mcws
+MinecraftとPythonを繋げるためのパッケージ
 
 ---
 
 ## インストール
 
 ```sh
-pip install git+https://github.com/HRTK92/py-mcws
+pip install py-mcws
 ```
 
 ## 使い方
