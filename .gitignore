@@ -1,2 +1,8 @@
 py_mcws/__pycache__/*.pyc
 ws.py
+
+build/
+dist/
+py_mcws.egg-info/
+
+.pypirc
