@@ -52,9 +52,9 @@ class WsClient:
 
     async def parse_command(self, message):
         if message["header"]["messagePurpose"] == "event":
-            event_name = message["body"]["eventName"]
+            event_name = message["header"]["eventName"]
             await self.event(event_name, message)
-            if message["body"]["eventName"] == "PlayerMessage" and message["body"]["properties"]['MessageType'] == 'chat':
+            if message["header"]["eventName"] == "PlayerMessage" and message["header"]["properties"]['MessageType'] == 'chat':
                 pass
         elif message["header"]["messagePurpose"] == "error":
             await self.event("error", message)
