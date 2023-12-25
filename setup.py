@@ -13,7 +13,7 @@ def _requires_from_file(filename):
 
 setup(
     name='py-mcws',
-    version="1.0.2",
+    version="1.1.0",
     description="Minecraft Bedrock WebSocket",
     long_description=long_description,
     long_description_content_type="text/markdown",
