@@ -64,10 +64,3 @@ async def event_PlayerMessage(self, event):
 cmd = await self.command("say hello")
 print(cmd)
 ```
-
-## ScoreBoard (作成中)
-
-```python
-scoreboard = py_mcws.ScoreBoard("名前"、"表示名")
-await scoreboard.show()
-```

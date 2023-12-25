@@ -6,15 +6,11 @@ import uuid
 import websockets
 from websockets import serve
 
-from .scoreboard import ScoreBoard
-
-
 class WsClient:
     def start(self, host="0.0.0.0", port=19132):
         self.ws = websockets.serve(self.receive, host, port)
         self.host = host
         self.port = port
-        self.ScoreBoard = ScoreBoard
         self.loop = asyncio.get_event_loop()
         self.loop.run_until_complete(self.ws)
         self.event_ready()
