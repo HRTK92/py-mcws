@@ -1,4 +1,6 @@
-py_mcws/__pycache__/*.pyc
+py_mcws/__pycache__/
+__pycache__/
+.pytest_cache/
 ws.py
 
 build/

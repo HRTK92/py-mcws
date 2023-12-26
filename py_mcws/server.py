@@ -4,9 +4,6 @@ import json
 import uuid
 
 import websockets
-from websockets import serve
-
-from .scoreboard import ScoreBoard
 
 
 class WsClient:
@@ -14,7 +11,6 @@ class WsClient:
         self.ws = websockets.serve(self.receive, host, port)
         self.host = host
         self.port = port
-        self.ScoreBoard = ScoreBoard
         self.loop = asyncio.get_event_loop()
         self.loop.run_until_complete(self.ws)
         self.event_ready()
@@ -54,7 +50,10 @@ class WsClient:
         if message["header"]["messagePurpose"] == "event":
             event_name = message["header"]["eventName"]
             await self.event(event_name, message)
-            if message["header"]["eventName"] == "PlayerMessage" and message["body"]["type"] == 'chat':
+            if (
+                message["header"]["eventName"] == "PlayerMessage" and
+                message["body"]["type"] == 'chat'
+            ):
                 pass
         elif message["header"]["messagePurpose"] == "error":
             await self.event("error", message)
@@ -79,7 +78,8 @@ class WsClient:
         await self.ws.send(cmd_json)
         data = await self.ws.recv()
         msg = json.loads(data)
-        if msg["header"]["messagePurpose"] == "commandResponse" and msg["header"]["requestId"] == uuid4:
+        if (msg["header"]["messagePurpose"] == "commandResponse" and
+                msg["header"]["requestId"] == uuid4):
             return msg
         else:
             return None
@@ -89,10 +89,10 @@ class WsClient:
         if args == ():
             try:
                 await eval(f"{func}()")
-            except NameError as e:
+            except NameError:
                 print(f"event_{name}")
         else:
             try:
                 await eval(f"{func}({args})")
-            except NameError as e:
+            except NameError:
                 print(f"event_{name}")

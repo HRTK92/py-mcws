@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 from os import path
 
 here = path.abspath(path.dirname(__file__))
@@ -11,9 +11,10 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 def _requires_from_file(filename):
     return open(filename).read().splitlines()
 
+
 setup(
     name='py-mcws',
-    version="1.1.0",
+    version="1.1.1",
     description="Minecraft Bedrock WebSocket",
     long_description=long_description,
     long_description_content_type="text/markdown",

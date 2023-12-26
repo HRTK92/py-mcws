@@ -1,2 +1,4 @@
+from .__version__ import __version__
 from .server import WsClient
-from .scoreboard import ScoreBoard
+
+__all__ = ["__version__", "WsClient"]
