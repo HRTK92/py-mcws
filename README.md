@@ -1,5 +1,11 @@
 # py-mcws
-MinecraftとPythonを繋げるためのパッケージ
+
+![PyPI - Version](https://img.shields.io/pypi/v/py-mcws)
+[![Downloads](https://static.pepy.tech/badge/py-mcws)](https://pepy.tech/project/py-mcws)
+![PyPI - License](https://img.shields.io/pypi/l/py-mcws)
+[![Upload Python Package](https://github.com/HRTK92/py-mcws/actions/workflows/python-publish.yml/badge.svg)](https://github.com/HRTK92/py-mcws/actions/workflows/python-publish.yml)
+
+> MinecraftとPythonを繋げるためのライブラリ
 
 ---
 
