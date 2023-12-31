@@ -146,8 +146,8 @@ class WebsocketServer():
 
     async def _receive(self, websocket):
         """データを受信する"""
-        self.ws = websocket
         await self._run_event("connect")
+        # イベントを自動で登録する
         if self.auto_listen_event:
             for event in self.events:
                 if event[0] in ["ready", "connect", "disconnect", "error"]:
@@ -158,7 +158,7 @@ class WebsocketServer():
                 print(f"\033[32m{event[0]}を登録しました\033[0m]]")
         try:
             while True:
-                data = await self.ws.recv()
+                data = await websocket.recv()
                 msg = json.loads(data)
                 await self._parse_command(msg)
         except (
@@ -194,6 +194,8 @@ class WebsocketServer():
 
     async def command(self, cmd: str):
         """コマンドを送信し、レスポンスを受信する"""
+        if self.ws and self.ws.open is False:
+            return None
         uuid4 = str(uuid.uuid4())
         cmd_json = json.dumps({
             "body": {

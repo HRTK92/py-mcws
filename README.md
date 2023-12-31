@@ -38,7 +38,7 @@ async def on_connect():
 async def on_PlayerMessage(event):
     print()
 
-server.start()
+server.start(host="0.0.0.0", port=19132)
 ```
 
 > [!WARNING]
@@ -84,7 +84,7 @@ Minecraft内のチャットで以下のコマンドを実行してください�
 /connect host:port
 ```
 
-## イベント
+## イベントを受け取る
 
 > [!NOTE]
 > Minecraftで受け取れるイベントは以下から確認してください。  
@@ -98,7 +98,9 @@ async def on_PlayerMessage(event):
     print(event)
 ```
 
-## コマンド
+## コマンドを実行する
+
+Minecraft と接続している状態でコマンドを実行してください。
 
 ```python
 cmd = await self.command("say hello")
