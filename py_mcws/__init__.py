@@ -1,8 +1,8 @@
-from .server import WsClient
+from .server import WsClient, WebsocketServer
 
-__version__ = "1.1.2"
+__version__ = "2.0.0"
 __author__ = "HRTK92"
 __license__ = "MIT"
 __url__ = "https://github.com/HRTK92/py-mcws"
 
-__all__ = ["WsClient"]
+__all__ = ["WsClient", "WebsocketServer"]

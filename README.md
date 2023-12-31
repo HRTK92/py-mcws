@@ -5,7 +5,7 @@
 ![PyPI - License](https://img.shields.io/pypi/l/py-mcws)
 [![Upload Python Package](https://github.com/HRTK92/py-mcws/actions/workflows/python-publish.yml/badge.svg)](https://github.com/HRTK92/py-mcws/actions/workflows/python-publish.yml)
 
-> MinecraftとPythonを繋げるためのライブラリ
+> MinecraftとPythonを繋げるためのシンプルなライブラリ
 
 ---
 
@@ -16,6 +16,33 @@ pip install py-mcws
 ```
 
 ## 使い方
+
+```python
+import py_mcws
+
+server = py_mcws.WebsocketServer()
+
+
+@server.event
+async def on_ready(host, port):
+    print(f"サーバーを起動しました。\n'/connect {host}:{port}'で接続できます")
+
+
+@server.event
+async def on_connect():
+    print("接続しました")
+    await server.command("say Hello World!")
+
+
+@server.event
+async def on_PlayerMessage(event):
+    print()
+
+server.start()
+```
+
+> [!WARNING]
+> 現在、以下のコードは非推奨です。
 
 ```python
 import py_mcws
@@ -55,12 +82,13 @@ Minecraft内のチャットで
 
 ## イベント
 
-[イベント一覧](https://gist.github.com/jocopa3/5f718f4198f1ea91a37e3a9da468675c#file-mcpe-w10-event-names)
+> [!NOTE]
+> Minecraftで受け取れるイベントは以下から確認してください。
+> [MCPE & W10 Event Names](https://gist.github.com/jocopa3/5f718f4198f1ea91a37e3a9da468675c#file-mcpe-w10-event-names) by jocopa3
 
 ```python
-self.events["PlayerMessage"]
-
-async def event_PlayerMessage(self, event):
+@server.event
+async def on_PlayerMessage(self, event):
     print(event)
 ```
 
