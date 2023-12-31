@@ -31,7 +31,7 @@ async def on_ready(host, port):
 @server.event
 async def on_connect():
     print("接続しました")
-    await server.command("say Hello World!")
+    await server.command("say Hello World!") #　メッセージを送信
 
 
 @server.event
@@ -74,7 +74,10 @@ MyWsClient().start(host="0.0.0.0", port=19132)
 
 ## 接続の仕方
 
-Minecraft内のチャットで
+> [!WARNING]
+> ワールドの設定でチートを有効にする必要があります。
+
+Minecraft内のチャットで以下のコマンドを実行してください。
 
 ```cmd
 /connect host:port
@@ -86,9 +89,11 @@ Minecraft内のチャットで
 > Minecraftで受け取れるイベントは以下から確認してください。
 > [MCPE & W10 Event Names](https://gist.github.com/jocopa3/5f718f4198f1ea91a37e3a9da468675c#file-mcpe-w10-event-names) by jocopa3
 
+`PlayerMessage`イベントを受け取る例
+
 ```python
 @server.event
-async def on_PlayerMessage(self, event):
+async def on_PlayerMessage(event):
     print(event)
 ```
 
