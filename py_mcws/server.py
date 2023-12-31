@@ -128,7 +128,7 @@ class WebsocketServer():
 
     def close(self):
         """websocket サーバーを閉じる"""
-        if self.ws and self.ws.open:
+        if self.ws:
             self.ws.close()
         else:
             raise Exception("Websocketサーバーが起動していません。")
