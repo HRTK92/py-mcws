@@ -109,6 +109,16 @@ class WebsocketServer():
     def _warning(self, msg: str):
         print(f"\033[33m[警告] {msg}\033[0m")
 
+    async def _run_server(self, host: str, port: int):
+        self.ws = await websockets.serve(self._receive, host, port)
+        await self._run_event("ready", host, port)
+        await self.ws.wait_closed()
+
+    async def _run_event(self, event_name: str, *args):
+        for event in self.events:
+            if event[0] == event_name:
+                await event[1](*args)
+
     def start(self, host="0.0.0.0", port=19132, auto_listen_event=True):
         """websocket サーバーを起動する"""
         self.auto_listen_event = auto_listen_event
@@ -117,11 +127,6 @@ class WebsocketServer():
     def close(self):
         """websocket サーバーを閉じる"""
         self.ws.close()
-
-    async def _run_server(self, host: str, port: int):
-        self.ws = await websockets.serve(self._receive, host, port)
-        await self._run_event("ready", host, port)
-        await self.ws.wait_closed()
 
     def event(self, func):
         """イベントを登録するデコレーター"""
@@ -134,10 +139,29 @@ class WebsocketServer():
         self.events.append([event_name, func])
         return func
 
-    async def _run_event(self, event_name: str, *args):
-        for event in self.events:
-            if event[0] == event_name:
-                await event[1](*args)
+    async def _receive(self, websocket):
+        """データを受信する"""
+        self.ws = websocket
+        await self._run_event("connect")
+        if self.auto_listen_event:
+            for event in self.events:
+                if event[0] in ["ready", "connect", "disconnect", "error"]:
+                    continue
+                if event[0] not in Events:
+                    continue
+                await self.listen_event(event)
+                print(f"\033[32m{event}を登録しました\033[0m]]")
+        try:
+            while True:
+                data = await self.ws.recv()
+                msg = json.loads(data)
+                await self._parse_command(msg)
+        except (
+                websockets.exceptions.ConnectionClosedOK,
+                websockets.exceptions.ConnectionClosedError,
+                websockets.exceptions.ConnectionClosed):
+            await self._run_event("disconnect")
+            sys.exit()
 
     async def listen_event(self, event_name: str):
         """受信するイベントを登録する"""
@@ -186,27 +210,3 @@ class WebsocketServer():
             return msg
         else:
             return None
-
-    async def _receive(self, websocket):
-        """データを受信する"""
-        self.ws = websocket
-        await self._run_event("connect")
-        if self.auto_listen_event:
-            for event in self.events:
-                if event[0] in ["ready", "connect", "disconnect", "error"]:
-                    continue
-                if event[0] not in Events:
-                    continue
-                await self.listen_event(event)
-                print(f"\033[32m{event}を登録しました\033[0m]]")
-        try:
-            while True:
-                data = await self.ws.recv()
-                msg = json.loads(data)
-                await self._parse_command(msg)
-        except (
-                websockets.exceptions.ConnectionClosedOK,
-                websockets.exceptions.ConnectionClosedError,
-                websockets.exceptions.ConnectionClosed):
-            await self._run_event("disconnect")
-            sys.exit()
