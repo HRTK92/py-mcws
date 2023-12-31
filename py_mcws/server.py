@@ -121,12 +121,17 @@ class WebsocketServer():
 
     def start(self, host="0.0.0.0", port=19132, auto_listen_event=True):
         """websocket サーバーを起動する"""
+        if self.ws and self.ws.open:
+            raise Exception("すでにWebsocketサーバーが起動しています。")
         self.auto_listen_event = auto_listen_event
         asyncio.run(self._run_server(host, port))
 
     def close(self):
         """websocket サーバーを閉じる"""
-        self.ws.close()
+        if self.ws and self.ws.open:
+            self.ws.close()
+        else:
+            raise Exception("Websocketサーバーが起動していません。")
 
     def event(self, func):
         """イベントを登録するデコレーター"""
@@ -150,7 +155,7 @@ class WebsocketServer():
                 if event[0] not in Events:
                     continue
                 await self.listen_event(event)
-                print(f"\033[32m{event}を登録しました\033[0m]]")
+                print(f"\033[32m{event[0]}を登録しました\033[0m]]")
         try:
             while True:
                 data = await self.ws.recv()
