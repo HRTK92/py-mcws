@@ -165,17 +165,20 @@ class WebsocketServer():
 
     async def listen_event(self, event_name: str):
         """受信するイベントを登録する"""
-        await self.ws.send(json.dumps({
-            "body": {
-                "eventName": event_name
-            },
-            "header": {
-                "requestId": "00000000-0000-0000-0000-000000000000",
-                "messagePurpose": "subscribe",
-                "version": 1,
-                "messageType": "commandRequest"
-            }
-        }))
+        if self.ws and self.ws.open:
+            await self.ws.send(json.dumps({
+                "body": {
+                    "eventName": event_name
+                },
+                "header": {
+                    "requestId": "00000000-0000-0000-0000-000000000000",
+                    "messagePurpose": "subscribe",
+                    "version": 1,
+                    "messageType": "commandRequest"
+                }
+            }))
+        else:
+            self._warning("WebSocket接続が確立されていません。")
 
     async def _parse_command(self, message):
         if message["header"]["messagePurpose"] == "event":
