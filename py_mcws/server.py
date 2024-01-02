@@ -129,13 +129,13 @@ class WebsocketServer():
         self.auto_listen_event = auto_listen_event
         asyncio.run(self._run_server(host, port))
 
-    async def close(self):
-        """websocket サーバーを停止する"""
-        if self.serve:
-            await self.serve.close()
-            raise Exception("Websocketサーバーを停止しました。")
-        else:
-            self._warning("WebSocketサーバーが起動していません。")
+    #async def close(self):
+    #    """websocket サーバーを停止する"""
+    #    if self.serve is not None:
+    #        await self.serve.close()
+    #        raise Exception("Websocketサーバーを停止しました。")
+    #    else:
+    #        self._warning("WebSocketサーバーが起動していません。")
 
     def event(self, func):
         """イベントを登録するデコレーター"""
