@@ -102,17 +102,20 @@ class WsClient:
 
 class WebsocketServer():
     def __init__(self):
+        self.serve = None
         self.ws = None
         self.events = []
         self.auto_listen_event = None
+        self.show_warning = True
 
     def _warning(self, msg: str):
-        print(f"\033[33m[警告] {msg}\033[0m")
+        if self.show_warning:
+            print(f"\033[33m[警告] {msg}\033[0m")
 
     async def _run_server(self, host: str, port: int):
-        self.ws = await websockets.serve(self._receive, host, port)
+        self.serve = await websockets.serve(self._receive, host, port)
         await self._run_event("ready", host, port)
-        await self.ws.wait_closed()
+        await asyncio.Future()
 
     async def _run_event(self, event_name: str, *args):
         for event in self.events:
@@ -125,6 +128,14 @@ class WebsocketServer():
             raise Exception("すでにWebsocketサーバーが起動しています。")
         self.auto_listen_event = auto_listen_event
         asyncio.run(self._run_server(host, port))
+
+    async def close(self):
+        """websocket サーバーを停止する"""
+        if self.serve:
+            await self.serve.close()
+            raise Exception("Websocketサーバーを停止しました。")
+        else:
+            self._warning("WebSocketサーバーが起動していません。")
 
     def event(self, func):
         """イベントを登録するデコレーター"""
