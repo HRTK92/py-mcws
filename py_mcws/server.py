@@ -102,17 +102,20 @@ class WsClient:
 
 class WebsocketServer():
     def __init__(self):
+        self.serve = None
         self.ws = None
         self.events = []
         self.auto_listen_event = None
+        self.show_warning = True
 
     def _warning(self, msg: str):
-        print(f"\033[33m[警告] {msg}\033[0m")
+        if self.show_warning:
+            print(f"\033[33m[警告] {msg}\033[0m")
 
     async def _run_server(self, host: str, port: int):
-        self.ws = await websockets.serve(self._receive, host, port)
+        self.serve = await websockets.serve(self._receive, host, port)
         await self._run_event("ready", host, port)
-        await self.ws.wait_closed()
+        await asyncio.Future()
 
     async def _run_event(self, event_name: str, *args):
         for event in self.events:
@@ -121,17 +124,18 @@ class WebsocketServer():
 
     def start(self, host="0.0.0.0", port=19132, auto_listen_event=True):
         """websocket サーバーを起動する"""
-        if self.ws and self.ws.open:
+        if self.ws:
             raise Exception("すでにWebsocketサーバーが起動しています。")
         self.auto_listen_event = auto_listen_event
         asyncio.run(self._run_server(host, port))
 
-    def close(self):
-        """websocket サーバーを閉じる"""
-        if self.ws:
-            self.ws.close()
+    async def close(self):
+        """websocket サーバーを停止する"""
+        if self.serve:
+            await self.serve.close()
+            raise Exception("Websocketサーバーを停止しました。")
         else:
-            raise Exception("Websocketサーバーが起動していません。")
+            self._warning("WebSocketサーバーが起動していません。")
 
     def event(self, func):
         """イベントを登録するデコレーター"""
@@ -146,6 +150,7 @@ class WebsocketServer():
 
     async def _receive(self, websocket):
         """データを受信する"""
+        self.ws = websocket
         await self._run_event("connect")
         # イベントを自動で登録する
         if self.auto_listen_event:
@@ -154,11 +159,11 @@ class WebsocketServer():
                     continue
                 if event[0] not in Events:
                     continue
-                await self.listen_event(event)
-                print(f"\033[32m{event[0]}を登録しました\033[0m]]")
+                await self.listen_event(event[0])
+                print(f"\033[32m{event[0]}を登録しました\033[0m")
         try:
             while True:
-                data = await websocket.recv()
+                data = await self.ws.recv()
                 msg = json.loads(data)
                 await self._parse_command(msg)
         except (
@@ -170,7 +175,7 @@ class WebsocketServer():
 
     async def listen_event(self, event_name: str):
         """受信するイベントを登録する"""
-        if self.ws and self.ws.open:
+        if self.ws:
             await self.ws.send(json.dumps({
                 "body": {
                     "eventName": event_name
@@ -194,7 +199,7 @@ class WebsocketServer():
 
     async def command(self, cmd: str):
         """コマンドを送信し、レスポンスを受信する"""
-        if self.ws and self.ws.open is False:
+        if self.ws is False:
             return None
         uuid4 = str(uuid.uuid4())
         cmd_json = json.dumps({
