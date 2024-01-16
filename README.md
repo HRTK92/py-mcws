@@ -25,52 +25,21 @@ server = py_mcws.WebsocketServer()
 
 @server.event
 async def on_ready(host, port):
-    print(f"サーバーを起動しました。\n'/connect {host}:{port}'で接続できます")
+    print("サーバーを起動しました。")
+    print(f"'/connect {host}:{port}' で接続できます")
 
 
 @server.event
 async def on_connect():
     print("接続しました")
-    await server.command("say Hello World!") #　メッセージを送信
+    await server.command("say Hello World!") # メッセージを送信
 
 
 @server.event
 async def on_PlayerMessage(event):
-    print()
+    print(event)
 
 server.start(host="0.0.0.0", port=19132)
-```
-
-> [!WARNING]
-> 現在、以下のコードは非推奨です。  
-> [クロームブックのマインクラフト統合版でプログラミングをしてみる](https://saitodev.co/microbit/chromebook/article/57)を参考してください。
-
-```python
-import py_mcws
-
-class MyWsClient(py_mcws.WsClient):
-    def event_ready(self):
-        print(f"Ready {self.host}:{self.port}")
-
-        #受け取るイベント
-        self.events = ["PlayerMessage", "PlayerDied"]
-    
-    async def event_connect(self):
-        print("Connected!")
-
-        #コマンドを実行
-        await self.command("say Hello")
-    
-    async def event_disconnect(self):
-        print("disconnect!")
-
-    async def event_PlayerMessage(self, event):
-        print(event)
-
-    async def event_PlayerDied(self, event):
-        print(event)
-
-MyWsClient().start(host="0.0.0.0", port=19132)
 ```
 
 ## 接続の仕方
@@ -103,6 +72,16 @@ async def on_PlayerMessage(event):
 Minecraft と接続している状態でコマンドを実行してください。
 
 ```python
-cmd = await self.command("say hello")
+cmd = await server.command("say Hello World!")
 print(cmd)
 ```
+
+## 記事
+
+以下の記事は、[inunosinsi](https://github.com/inunosinsi)さんによる記事です。  
+thanks!
+
+- [クロームブックのマインクラフト統合版でプログラミングをしてみる](https://saitodev.co/microbit/chromebook/article/57)
+- [py-mcwsの仕組みを見てみよう](https://saitodev.co/microbit/chromebook/article/58)
+- [py-mcwsでプレイヤーの頭上でニワトリを召喚してみる](https://saitodev.co/microbit/chromebook/article/61)
+- [py-mcwsでプレイヤーの前に任意のブロックを置いてみる](https://saitodev.co/microbit/chromebook/article/62)
